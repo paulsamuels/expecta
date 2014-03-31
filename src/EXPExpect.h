@@ -10,6 +10,7 @@
   BOOL _negative;
   BOOL _asynchronous;
   BOOL _collection;
+  BOOL _atLeastOne;
 }
 
 @property(nonatomic, copy) EXPIdBlock actualBlock;
@@ -20,8 +21,10 @@
 @property(nonatomic) BOOL negative;
 @property(nonatomic) BOOL asynchronous;
 @property(nonatomic) BOOL collection;
+@property(nonatomic) BOOL atLeastOne;
 
 @property(nonatomic, readonly) EXPExpect *elements;
+@property(nonatomic, readonly) EXPExpect *any;
 @property(nonatomic, readonly) EXPExpect *to;
 @property(nonatomic, readonly) EXPExpect *toNot;
 @property(nonatomic, readonly) EXPExpect *notTo;

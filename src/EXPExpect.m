@@ -16,6 +16,7 @@
 
 @dynamic
   actual,
+  any,
   to,
   toNot,
   notTo,
@@ -24,6 +25,7 @@
 
 @synthesize
   actualBlock=_actualBlock,
+  atLeastOne=_atLeastOne,
   testCase=_testCase,
   negative=_negative,
   asynchronous=_asynchronous,
@@ -59,6 +61,12 @@
 - (EXPExpect *)elements;
 {
   self.collection = YES;
+  return self;
+}
+
+- (EXPExpect *)any;
+{
+  self.atLeastOne = YES;
   return self;
 }
 
@@ -122,8 +130,17 @@
       [self.failureMessages removeAllObjects];
     }
   }
-  if(self.failureMessages.count > 0) {
-    EXPFail(self.testCase, self.lineNumber, self.fileName, [self.failureMessages componentsJoinedByString:@", "]);
+  
+  BOOL atLeastOneMatches = [self atLeastOne] && self.failureMessages.count != [actual count];
+  
+  if(self.failureMessages.count > 0 && !atLeastOneMatches) {
+    NSString *failureMessage = [self.failureMessages componentsJoinedByString:@", "];
+    
+    if([self atLeastOne]) {
+      failureMessage = [@"[expected at least one to pass]" stringByAppendingString:failureMessage];
+    }
+    
+    EXPFail(self.testCase, self.lineNumber, self.fileName, failureMessage);
   }
   self.negative = NO;
 }

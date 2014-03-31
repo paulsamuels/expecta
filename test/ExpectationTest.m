@@ -37,6 +37,26 @@
   assertFail(test_expect(b).elements.to.equal(2), @"(element)=> expected: 2, got: 1");
 }
 
+- (void)test_expect_elements_any {
+  x = expect(@"foo");
+  assertFalse(x.atLeastOne);
+  x = expect(@"foo").any;
+  assertTrue(x.atLeastOne);
+  
+//  // Array
+  NSArray *a = @[ @1, @2, @1 ];
+  assertPass(test_expect(a).elements.any.equal(2));
+  a = @[ @1, @1, @1 ];
+  assertFail(test_expect(a).elements.any.equal(2), @"[expected at least one to pass](0)=> expected: 2, got: 1, (1)=> expected: 2, got: 1, (2)=> expected: 2, got: 1");
+
+  // Set
+  NSSet *b = [NSSet setWithObjects:@1, @"", nil];
+  Class expectedClass = [NSNumber class];
+  assertPass(test_expect(b).elements.any.beKindOf(expectedClass));
+  b = [NSSet setWithObjects:@1, @1, nil];
+  assertFail(test_expect(b).elements.any.equal(2), @"[expected at least one to pass](element)=> expected: 2, got: 1");
+}
+
 - (void)test_expect_NotTo {
   x = expect(@"foo");
   assertFalse(x.negative);
